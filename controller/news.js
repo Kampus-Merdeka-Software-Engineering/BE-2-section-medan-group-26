@@ -1,24 +1,55 @@
-const express = require('express');
-const app = express();
+const articles = require('../model/articles');
 
-// Endpoint untuk halaman berita dan komentar
-app.get('/news/:id', (req, res) => {
-  const newsId = req.params.id;
-})
+function addArticle(req, res, next){
+    articles.create({
+        title: req.body.title,
+        urlImage: req.body.urlImage,
+        description: req.body.description
+    })
+    .then(function(){
+        res.status(201).json({
+            message: "article berhasil ditambahkan"
+        })
+    })
+    .catch(function(err){
+        res.status(500).json({
+            error: err,
+        })
+    })
+}
 
-// Endpoint komentar (metode POST)
-app.post('/comments', (req, res) => {
-  const { username, comments } = req.body;
+function getArticles(req, res, next){
+    articles.findAll()
+  .then(function(articles){
+    res.status(200).json(articles)
+   })
+   .catch(err=> console.error(err));
+  }
 
-  // Query untuk menyimpan komentar baru ke database
-  const insertComment = 'INSERT INTO comments (username, comments, news_id) VALUES (?, ?, ?)';
-  db.query(insertComment, [username, comments], (err, results) => {
-    if (err) {
-      console.error('Error during comment creation:', err);
-      res.status(500).send('Internal Server Error');
-      return;
-    }
+  function backfillArticle(req, res, next){
+    articles.bulkCreate([{
+        title: "Article 1",
+        urlImage: "https://i.ytimg.com/vi/QWB-yrCBw9Y/hqdefault.jpg",
+        description: "Ini Berita Pertama"
+    },
+    {
+        title: "Article 2",
+        urlImage: "https://t3n.de/news/wp-content/uploads/2022/12/EQE-e1672242194293.jpg",
+        description: "Ini Berita Kedua"
+    },
+    {
+        title: "Article 3",
+        urlImage: "https://cdn.mos.cms.futurecdn.net/c3RwNWN8XeDGfgrBXGaR4f-1200-80.jpg",
+        description: "Ini berita ketiga"
+    }])
+        .then(()=> res.json({message: "Successfully backfilled in"}))
+        .catch(err=> {
+            console.error(err);
+            res.status(500).json({
+                error: err
+            })
+        });
+  }
 
-    res.send('Komentar berhasil ditambahkan!');
-  });
-});
+
+module.exports = {addArticle, getArticles, backfillArticle}
