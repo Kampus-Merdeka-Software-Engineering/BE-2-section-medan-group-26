@@ -1,6 +1,5 @@
 const Comment = require('../model/comment');
 
-// Membuat komentar baru
 const createComment = async (req, res) => {
   try {
     const { comment, username } = req.body;
@@ -8,18 +7,17 @@ const createComment = async (req, res) => {
     res.status(201).json(newComment);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Terjadi kesalahan dalam membuat komentar' });
+    res.status(500).json({ message: 'Kesalahan dalam membuat komentar' });
   }
 };
 
-// Menampilkan semua komentar
 const getAllComments = async (req, res) => {
   try {
     const comments = await Comment.findAll();
     res.json(comments);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Terjadi kesalahan dalam mengambil komentar' });
+    res.status(500).json({ message: 'Kesalahan dalam mengambil komentar' });
   }
 };
 

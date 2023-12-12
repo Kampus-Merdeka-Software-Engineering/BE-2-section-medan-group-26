@@ -3,16 +3,16 @@ const router = express.Router();
 const Comment = require('../controller/CommentController');
 const Authentication = require('../middleware/CommentVerify')
 
-// Membuat komentar baru
+//komentar baru
 router.post('/comment', Authentication, Comment.createComment);
 
-// Menampilkan semua komentar
+// All Comment
 router.get('/comments', Comment.getAllComments);
 
-// Menampilkan komentar berdasarkan ID
+// Komentar berdasarkan ID
 router.get('/comments/:id', Comment.getCommentById);
 
-// Menghapus komentar berdasarkan ID
+// Komentar berdasarkan ID
 router.delete('/comments/:id', Comment.deleteComment);
 
 module.exports = router;
