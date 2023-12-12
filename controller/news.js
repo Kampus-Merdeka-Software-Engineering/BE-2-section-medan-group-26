@@ -2,6 +2,7 @@ const articles = require('../model/articles');
 
 function addArticle(req, res, next){
     articles.create({
+        category: req.body.category,
         title: req.body.title,
         urlImage: req.body.urlImage,
         description: req.body.description
@@ -28,21 +29,21 @@ function getArticles(req, res, next){
 
   function backfillArticle(req, res, next){
     articles.bulkCreate([{
+        category: "sepakbola",
         title: "Article 1",
         urlImage: "https://i.ytimg.com/vi/QWB-yrCBw9Y/hqdefault.jpg",
-        category: "bola",
         description: "Ini Berita Pertama"
     },
     {
+        category: "bulutangkis",
         title: "Article 2",
         urlImage: "https://t3n.de/news/wp-content/uploads/2022/12/EQE-e1672242194293.jpg",
-        category: "bulutangkis",
         description: "Ini Berita Kedua"
     },
     {
+        category: "basket",
         title: "Article 3",
         urlImage: "https://cdn.mos.cms.futurecdn.net/c3RwNWN8XeDGfgrBXGaR4f-1200-80.jpg",
-        category: "basket",
         description: "Ini berita ketiga"
     }])
         .then(()=> res.json({message: "Successfully backfilled in"}))
